@@ -1,57 +1,29 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { HttpException, InternalServerErrorException, NotFoundException } from "@nestjs/common/exceptions";
-import { InjectRepository } from "@nestjs/typeorm";
-import { NewUserDTO } from "src/shared/dto/users/NewUser.dto";
-import { UsersDTO } from "src/shared/DTO/users/Users.dto";
-import { UsersEntity } from "src/shared/entities/users/Users.entity";
-import { Repository } from "typeorm";
+import { Injectable } from "@nestjs/common";
+import { UsersDTO } from "src/shared/DTO/Users.dto";
+
+let users : UsersDTO[] = [
+    { id : 1, name : "tutu", pseudo : "tutu" },
+    { id : 1, name : "tata", pseudo : "tata" },
+    { id : 1, name : "titi", pseudo : "titi" },
+    { id : 1, name : "tete", pseudo : "tete" }
+]
+
 
 @Injectable()
 export class UsersQlService{
 
-
-    constructor(
-        @InjectRepository(UsersEntity) private usersRepo : Repository<UsersEntity>,
-    ){}
-    
+    constructor(){}
 
     async getAll() : Promise<UsersDTO[]>
     {
-        return this.usersRepo.find()
+        return users
     }
 
-    async checkUserByPseudo(pseudo : string) : Promise<boolean>
+    async createUser(newUser : UsersDTO) : Promise<UsersDTO>
     {
-        return this.usersRepo.findOneOrFail({
-            select : { id : true},
-            where : { pseudo : pseudo }
-        })
-        .then(_ => {
-            return true
-        })
-        .catch(_ => {
-            return false
-        })
+        users.push(newUser)
+        return users[users.length]
     }
-
-
-
-    async createUser(newUser : NewUserDTO) : Promise<NewUserDTO>
-    {
-        if(await this.checkUserByPseudo(newUser.pseudo))
-            throw new NotFoundException("User already exist")
-        
-        let createdUser : UsersEntity = this.usersRepo.create(newUser)
-        
-        return this.usersRepo.save(createdUser)
-        .catch(_ => { 
-            console.log(_)
-            throw new InternalServerErrorException("erreur inconnue")
-        })
-    }
-
-
-    
 }
 
 

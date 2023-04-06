@@ -19,6 +19,7 @@ export class UsersQlResolver{
     @Mutation(() => Users)
     async createUser(@Args("args") newUser : CreateUser)
     {
+        console.log(newUser)
         return this.usersServe.createUser(newUser)
     }
    

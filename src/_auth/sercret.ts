@@ -1,1 +1,0 @@
-export const JWT_SECRET = "digital_city_full_stack_javascript_deux_mille_vingt_trois"

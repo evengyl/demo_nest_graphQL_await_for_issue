@@ -1,10 +1,10 @@
-import { IsDefined, IsNumber, IsString, MaxLength, MinLength } from "class-validator"
+import { IsDefined, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator"
 
 export class UsersDTO{
 
-    @IsDefined()
+    @IsOptional()
     @IsNumber()
-    id : number
+    id? : number
 
     @IsDefined()
     @IsString()
